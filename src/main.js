@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
       const isMobile = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
       (function tryLoadLocalPhoto() {
         const heroImg = document.getElementById('previewImg0');
@@ -17,24 +17,23 @@
       });
 
       // =========================================================
-      // 1. WEB AUDIO SYNTHESIZER (Romantic Music Box + Sound FX)
+      // 1. AUDIO ENGINE (MP3 Background Music + Wish Voice + Sound FX)
       // =========================================================
+      const baseUrl = import.meta.env.BASE_URL || './';
+      const bgmSrc = baseUrl + 'nastelbom-happy-birthday-471481.mp3';
+      const wishSrc = baseUrl + 'chuc_em_sinh_nhat_vui_ve_ad4fba7b-5c9e-44b1-9f21-8cb4a86481b1.mp3';
+
+      const bgMusic = new Audio(bgmSrc);
+      bgMusic.loop = true;
+      bgMusic.volume = 0.55;
+      bgMusic.preload = 'auto';
+
+      const wishAudio = new Audio(wishSrc);
+      wishAudio.volume = 1.0;
+      wishAudio.preload = 'auto';
+
       let audioCtx = null;
       let isPlayingMusic = false;
-      let melodyTimer = null;
-
-      const birthdayNotes = [
-        { f: 523.25, d: 350 }, { f: 523.25, d: 350 }, { f: 587.33, d: 600 },
-        { f: 523.25, d: 600 }, { f: 698.46, d: 600 }, { f: 659.25, d: 1000 },
-        { f: 523.25, d: 350 }, { f: 523.25, d: 350 }, { f: 587.33, d: 600 },
-        { f: 523.25, d: 600 }, { f: 783.99, d: 600 }, { f: 698.46, d: 1000 },
-        { f: 523.25, d: 350 }, { f: 523.25, d: 350 }, { f: 1046.50, d: 600 },
-        { f: 880.00, d: 600 }, { f: 698.46, d: 600 }, { f: 659.25, d: 600 },
-        { f: 587.33, d: 900 }, { f: 932.33, d: 350 }, { f: 932.33, d: 350 },
-        { f: 880.00, d: 600 }, { f: 698.46, d: 600 }, { f: 783.99, d: 600 },
-        { f: 698.46, d: 1200 }
-      ];
-      let noteIndex = 0;
 
       function ensureAudio() {
         if (!audioCtx) {
@@ -71,27 +70,21 @@
         playChimeNote(pitch, 180, 0.09);
       }
 
-      function scheduleNextMelodyNote() {
-        if (!isPlayingMusic) return;
-        const item = birthdayNotes[noteIndex];
-        playChimeNote(item.f, item.d * 0.95, 0.065);
-        noteIndex = (noteIndex + 1) % birthdayNotes.length;
-        melodyTimer = setTimeout(scheduleNextMelodyNote, item.d);
-      }
-
       function startMusic() {
         ensureAudio();
-        if (isPlayingMusic) return;
         isPlayingMusic = true;
-        document.getElementById('soundLabel').textContent = 'ON';
-        if (melodyTimer) clearTimeout(melodyTimer);
-        scheduleNextMelodyNote();
+        const soundLabel = document.getElementById('soundLabel');
+        if (soundLabel) soundLabel.textContent = 'ON';
+        bgMusic.play().catch(function (err) {
+          console.log('Audio autoplay prevented:', err);
+        });
       }
 
       function stopMusic() {
         isPlayingMusic = false;
-        if (melodyTimer) clearTimeout(melodyTimer);
-        document.getElementById('soundLabel').textContent = 'MUTED';
+        const soundLabel = document.getElementById('soundLabel');
+        if (soundLabel) soundLabel.textContent = 'MUTED';
+        bgMusic.pause();
       }
 
       document.getElementById('soundToggleBtn').addEventListener('click', function () {
@@ -629,6 +622,23 @@
           candleFlame.style.opacity = '0';
           candleAura.style.opacity = '0';
           candleStatusText.innerHTML = '<span class="text-amber-200 font-medium">Điều ước tuổi mới của Hoàng Anh đã bay vào ngân hà!</span> (Chạm lại nếu muốn thắp sáng nến)';
+          
+          // Phát âm thanh chúc mừng sinh nhật khi THỔI TẮT NẾN
+          try {
+            wishAudio.currentTime = 0;
+            if (isPlayingMusic) {
+              bgMusic.volume = 0.2; // Giảm nhẹ nhạc nền để nghe rõ lời chúc
+              wishAudio.onended = function () {
+                if (isPlayingMusic) bgMusic.volume = 0.55;
+              };
+            }
+            wishAudio.play().catch(function (err) {
+              console.log('Wish audio error:', err);
+            });
+          } catch (e) {
+            console.log(e);
+          }
+
           playPopSound(987.77);
           spawnBurst(cx, cy, isMobile ? 26 : 42);
         } else {
@@ -636,6 +646,16 @@
           candleFlame.style.opacity = '1';
           candleAura.style.opacity = '1';
           candleStatusText.textContent = 'Ngọn lửa ánh sáng đã bừng lên cho Hoàng Anh rồi.';
+          
+          // KHI THẮP LẠI NẾN: KHÔNG phát mp3 này (chỉ khi thổi tắt mới có)
+          try {
+            wishAudio.pause();
+            wishAudio.currentTime = 0;
+            if (isPlayingMusic) {
+              bgMusic.volume = 0.55;
+            }
+          } catch (e) {}
+
           playPopSound(659.25);
           spawnBurst(cx, cy, 16);
         }
