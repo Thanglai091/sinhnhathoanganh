@@ -521,43 +521,9 @@
             <path d="M15 9v6H9" stroke-width="1.2"/>
           </svg>
 
-          <!-- Single File Input for the User's 1 Photo -->
-          <input type="file" id="fileInput0" accept="image/*" class="hidden" />
-          <label for="fileInput0" class="block relative aspect-[4/5] w-full rounded-[20px] overflow-hidden cursor-pointer bg-gradient-to-br from-[#ff2a85]/15 via-[#8338ec]/20 to-[#00f5d4]/15 border border-white/20 flex flex-col items-center justify-center text-center p-0 transition-all duration-500 hover:border-pink-400/60 shadow-2xl group">
-            <img id="previewImg0" src="hoanganh.jpg" alt="Trần Hoàng Anh - Vận động viên Karate Huy Chương Đồng" class="w-full h-full object-cover object-center rounded-[18px] transition-transform duration-700 group-hover:scale-105" />
-
-            <!-- Custom Vector Art Portrait Placeholder -->
-            <div id="placeholder0" class="hidden flex flex-col items-center justify-center space-y-4 p-6">
-              <svg class="w-24 h-24" viewBox="0 0 120 120" fill="none">
-                <defs>
-                  <linearGradient id="portraitVecGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#ff2a85" />
-                    <stop offset="50%" stop-color="#ffd166" />
-                    <stop offset="100%" stop-color="#00f5d4" />
-                  </linearGradient>
-                </defs>
-                <!-- Geometric Aura Rings -->
-                <circle cx="60" cy="60" r="52" stroke="url(#portraitVecGrad)" stroke-width="1" stroke-dasharray="3 3" />
-                <circle cx="60" cy="60" r="40" stroke="url(#portraitVecGrad)" stroke-width="1.2" opacity="0.7" />
-                <!-- Minimalist Line-Art Silhouette & Star -->
-                <path d="M60 26 C67 26 72 32 72 39 C72 46 67 52 60 52 C53 52 48 46 48 39 C48 32 53 26 60 26 Z" stroke="#ffffff" stroke-width="1.5" />
-                <path d="M36 86 C38 71 47 63 60 63 C73 63 82 71 84 86" stroke="url(#portraitVecGrad)" stroke-width="1.8" stroke-linecap="round" />
-                <path d="M60 12 L62 19 L69 21 L62 23 L60 30 L58 23 L51 21 L58 19 Z" fill="#ffd166" />
-              </svg>
-
-              <div class="space-y-1.5">
-                <p class="font-syne text-[11px] font-bold uppercase tracking-[0.28em] text-pink-200">
-                  CHÂN DUNG CỦA EM
-                </p>
-                <p class="text-xs text-white/65 max-w-[210px] font-light leading-relaxed">
-                  Chạm vào khung để tải lên tấm ảnh đẹp nhất của Hoàng Anh
-                </p>
-              </div>
-
-              <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/25 bg-white/5 text-[10px] font-syne uppercase tracking-[0.2em] text-amber-200">
-                <span>+ CHỌN ẢNH DUY NHẤT</span>
-              </span>
-            </div>
+          <!-- Editorial Hero Photo Frame -->
+          <div class="block relative aspect-[4/5] w-full rounded-[20px] overflow-hidden bg-gradient-to-br from-[#ff2a85]/15 via-[#8338ec]/20 to-[#00f5d4]/15 border border-white/20 flex flex-col items-center justify-center text-center p-0 shadow-2xl group select-none">
+            <img id="previewImg0" src="hoanganh.jpg" alt="Trần Hoàng Anh - Vận động viên Karate Huy Chương Đồng" class="w-full h-full object-cover object-center rounded-[18px] transition-transform duration-700 group-hover:scale-105 pointer-events-none" />
 
             <!-- Karate Medalist Badge Tag Overlay -->
             <div class="absolute bottom-3 left-3 right-3 px-3.5 py-2.5 rounded-xl bg-[#07030f]/80 backdrop-blur-md border border-white/20 flex items-center justify-between text-left pointer-events-none z-10 shadow-lg">
@@ -570,7 +536,7 @@
               </div>
               <span class="text-[9px] font-syne uppercase tracking-widest text-pink-300 px-2 py-0.5 rounded-full border border-pink-400/40 bg-pink-500/15">WAKAMONO</span>
             </div>
-          </label>
+          </div>
 
           <!-- Caption Bar Below Portrait -->
           <div class="flex items-center justify-between pt-3 px-1 text-[10px] font-syne tracking-[0.18em] uppercase text-white/70">
@@ -1326,29 +1292,7 @@
       });
 
       // =========================================================
-      // 4. SINGLE HERO PHOTO SLOT UPLOAD
-      // =========================================================
-      const fileInput0 = document.getElementById('fileInput0');
-      const previewImg0 = document.getElementById('previewImg0');
-      const placeholder0 = document.getElementById('placeholder0');
-
-      if (fileInput0 && previewImg0 && placeholder0) {
-        fileInput0.addEventListener('change', function (e) {
-          const file = e.target.files && e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = function (ev) {
-            previewImg0.src = ev.target.result;
-            previewImg0.classList.remove('hidden');
-            placeholder0.classList.add('hidden');
-            spawnBurst(window.innerWidth / 2, window.innerHeight / 2, 28);
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-
-      // =========================================================
-      // 5. REAL-TIME 60FPS KINETIC VECTOR EXHIBITION ENGINE
+      // 4. REAL-TIME 60FPS KINETIC VECTOR EXHIBITION ENGINE
       // =========================================================
       let orbitFast = false;
       let orbitPhase = 0;
