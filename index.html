@@ -16,9 +16,9 @@
 </head>
 <body class="selection:bg-pink-500 selection:text-white">
 
-  <!-- Top Scroll Progress Line -->
-  <div class="fixed top-0 left-0 right-0 h-[2px] z-50 bg-white/5">
-    <div id="scrollProgressBar" class="h-full w-0 bg-gradient-to-r from-[#ff2a85] via-[#ffd166] to-[#00f5d4] transition-all duration-150"></div>
+  <!-- Top Scroll Progress Line (GPU scaleX instead of layout width thrashing) -->
+  <div class="fixed top-0 left-0 right-0 h-[2px] z-50 bg-white/5 overflow-hidden">
+    <div id="scrollProgressBar" class="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-[#ff2a85] via-[#ffd166] to-[#00f5d4] will-change-transform"></div>
   </div>
 
   <!-- Film Grain Overlay -->
@@ -38,7 +38,7 @@
   <!-- =========================================================
        INTRO CURTAIN OVERLAY (AWWWARDS PORTAL ENTRY)
        ========================================================= -->
-  <div id="introOverlay" class="fixed inset-0 z-50 flex flex-col items-center justify-between py-12 px-6 text-center transition-all duration-700 bg-[#07030f]/95 backdrop-blur-3xl">
+  <div id="introOverlay" class="fixed inset-0 z-50 flex flex-col items-center justify-between py-12 px-6 text-center transition-all duration-500 bg-[#07030f]/95">
     <div class="w-full flex items-center justify-between text-[10px] tracking-[0.28em] uppercase text-white/50 font-syne max-w-sm">
       <span>EDITION N°29.10</span>
       <span>M.THẮNG ✦ HOÀNG ANH</span>
@@ -105,7 +105,7 @@
        ========================================================= -->
   <header class="fixed top-2 left-0 right-0 z-30 flex items-center justify-between px-4 py-2.5 max-w-md mx-auto">
     <div class="editorial-panel px-3.5 py-1.5 rounded-full flex items-center gap-2.5">
-      <span class="w-1.5 h-1.5 rounded-full bg-[#00f5d4] animate-ping"></span>
+      <span class="w-1.5 h-1.5 rounded-full bg-[#00f5d4] animate-pulse"></span>
       <span class="text-[10px] font-syne font-bold tracking-[0.22em] uppercase text-white/90">M.THẮNG ✦ H.ANH</span>
     </div>
 
@@ -164,7 +164,7 @@
             <defs>
               <path id="badgeCirclePath" d="M 60, 60 m -44, 0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
             </defs>
-            <circle cx="60" cy="60" r="54" fill="rgba(7,3,15,0.75)" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+            <circle cx="60" cy="60" r="54" fill="rgba(7,3,15,0.85)" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
             <text fill="#ffd166" font-size="8.2" font-family="Syne, sans-serif" font-weight="700" letter-spacing="2.8">
               <textPath href="#badgeCirclePath">ONLY ONE • TRẦN HOÀNG ANH •</textPath>
             </text>
@@ -183,10 +183,16 @@
 
           <!-- Editorial Hero Photo Frame -->
           <div class="block relative aspect-[4/5] w-full rounded-[20px] overflow-hidden bg-gradient-to-br from-[#ff2a85]/15 via-[#8338ec]/20 to-[#00f5d4]/15 border border-white/20 flex flex-col items-center justify-center text-center p-0 shadow-2xl group select-none">
-            <img id="previewImg0" src="hoanganh.jpg" alt="Trần Hoàng Anh - Vận động viên Karate Huy Chương Đồng" class="w-full h-full object-cover object-center rounded-[18px] transition-transform duration-700 group-hover:scale-105 pointer-events-none" />
+            <img
+              id="previewImg0"
+              src="hoanganh.jpg"
+              alt="Trần Hoàng Anh - Vận động viên Karate Huy Chương Đồng"
+              decoding="async"
+              class="w-full h-full object-cover object-center rounded-[18px] transition-transform duration-700 group-hover:scale-105 pointer-events-none"
+            />
 
             <!-- Karate Medalist Badge Tag Overlay -->
-            <div class="absolute bottom-3 left-3 right-3 px-3.5 py-2.5 rounded-xl bg-[#07030f]/80 backdrop-blur-md border border-white/20 flex items-center justify-between text-left pointer-events-none z-10 shadow-lg">
+            <div class="absolute bottom-3 left-3 right-3 px-3.5 py-2.5 rounded-xl bg-[#07030f]/90 border border-white/20 flex items-center justify-between text-left pointer-events-none z-10 shadow-lg">
               <div class="flex items-center gap-2.5">
                 <span class="text-xl">🥋</span>
                 <div>
@@ -219,7 +225,7 @@
     </section>
 
     <!-- KINETIC TYPOGRAPHY RIBBON (NO EMOJIS, PURE VECTOR GEOMETRY) -->
-    <div class="py-3.5 bg-white/[0.03] border-y border-white/15 backdrop-blur-md overflow-hidden my-2">
+    <div class="py-3.5 bg-[#120726]/90 border-y border-white/15 overflow-hidden my-2">
       <div class="marquee-track flex items-center gap-8 text-[11px] font-syne font-bold uppercase tracking-[0.32em] text-white/85">
         <span class="flex items-center gap-8">
           <span>TRẦN HOÀNG ANH</span>
@@ -242,7 +248,7 @@
 
     <!-- =========================================================
          SECTION 02: INTERACTIVE VECTOR ART EXHIBITION
-         (Replaces the extra 2-3 photos with bespoke SVG vector art!)
+         (Viewport-aware 60fps SVG engine with zero filter blur lag)
          ========================================================= -->
     <section id="vectorExhibition" class="px-5 py-12 space-y-7">
       <div class="reveal-item space-y-2" data-reveal="curtain">
@@ -258,18 +264,18 @@
         </p>
       </div>
 
-      <!-- VECTOR CARD I: CELESTIAL ORBIT (Real-time 60fps Parametric 3D Elliptical Orbits & Comet Trails) -->
+      <!-- VECTOR CARD I: CELESTIAL ORBIT -->
       <div class="reveal-item prism-frame editorial-panel rounded-[26px] p-5 space-y-4 cursor-pointer transition-transform active:scale-[0.98]" data-reveal="glide-left" id="vectorCard1">
         <div class="flex items-center justify-between text-[10px] font-syne tracking-[0.22em] text-pink-300 uppercase">
           <span class="flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-pink-400 animate-pulse"></span>
             <span>ARTWORK I — GRAVITY</span>
           </span>
           <span id="card1Badge" class="px-2.5 py-0.5 rounded-full border border-pink-400/40 bg-pink-500/10">CHẠM TĂNG TỐC QUỸ ĐẠO</span>
         </div>
 
         <!-- Live Kinetic SVG Solar System & Gravitational Tether -->
-        <div class="relative h-48 w-full rounded-2xl bg-[#090314]/90 border border-white/10 flex items-center justify-center overflow-hidden">
+        <div class="relative h-48 w-full rounded-2xl bg-[#090314]/95 border border-white/10 flex items-center justify-center overflow-hidden">
           <svg viewBox="0 0 320 176" class="w-full h-full">
             <defs>
               <linearGradient id="orbitGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -285,16 +291,14 @@
                 <stop offset="0%" stop-color="#ff2a85" stop-opacity="0" />
                 <stop offset="100%" stop-color="#ffd166" stop-opacity="0.95" />
               </linearGradient>
+              <filter id="neonGlow1"></filter>
+              <filter id="noiseFilter"></filter>
               <radialGradient id="sunCore" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
                 <stop offset="35%" stop-color="#ffd166" stop-opacity="0.9" />
                 <stop offset="70%" stop-color="#ff2a85" stop-opacity="0.45" />
                 <stop offset="100%" stop-color="#ff2a85" stop-opacity="0" />
               </radialGradient>
-              <filter id="neonGlow1" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
             </defs>
 
             <!-- Subtle Astrological Coordinate Grid -->
@@ -320,7 +324,7 @@
               <ellipse cx="160" cy="88" rx="94" ry="34" fill="none" stroke="#00f5d4" stroke-width="1.4" class="orbit-stream-rev" opacity="0.85" />
             </g>
 
-            <!-- Hidden tether placeholder to preserve DOM id without drawing a dashed line between planets -->
+            <!-- Hidden tether placeholder -->
             <line id="gravityTether" x1="160" y1="88" x2="160" y2="88" stroke="none" opacity="0" class="hidden" />
 
             <!-- Central Supernova Star (Hoàng Anh) — Locked Steadily at Exact Center (160, 88) -->
@@ -331,22 +335,22 @@
               <circle cx="160" cy="88" r="3.5" fill="#ffd166" />
             </g>
 
-            <!-- Live 60fps Comet Trails & Orbiting Planets Group -->
+            <!-- Live Comet Trails & Orbiting Planets Group (No heavy feGaussianBlur) -->
             <g id="orbitingPlanets">
               <path id="cometTailAnh" d="M 90 65 L 95 68" fill="none" stroke="url(#cometGradCyan)" stroke-width="3.2" stroke-linecap="round" />
               <path id="cometTailEm" d="M 230 105 L 225 102" fill="none" stroke="url(#cometGradPink)" stroke-width="2.8" stroke-linecap="round" />
 
               <!-- Planet Em (Rose-Gold) -->
               <g id="planetEmGroup">
-                <circle id="planetEmHalo" cx="230" cy="105" r="10" fill="none" stroke="#ff2a85" stroke-width="1" opacity="0.65" />
-                <circle id="planetEm" cx="230" cy="105" r="5" fill="#ff2a85" filter="url(#neonGlow1)" />
+                <circle id="planetEmHalo" cx="230" cy="105" r="10" fill="rgba(255,42,133,0.18)" stroke="#ff2a85" stroke-width="1" opacity="0.7" />
+                <circle id="planetEm" cx="230" cy="105" r="5" fill="#ff2a85" />
                 <circle id="planetEmCore" cx="230" cy="105" r="2" fill="#ffd166" />
               </g>
 
               <!-- Planet Anh (Cyan-Gold) -->
               <g id="planetAnhGroup">
-                <circle id="planetAnhHalo" cx="90" cy="65" r="12.5" fill="none" stroke="#00f5d4" stroke-width="1" opacity="0.65" />
-                <circle id="planetAnh" cx="90" cy="65" r="6" fill="#00f5d4" filter="url(#neonGlow1)" />
+                <circle id="planetAnhHalo" cx="90" cy="65" r="12.5" fill="rgba(0,245,212,0.18)" stroke="#00f5d4" stroke-width="1" opacity="0.7" />
+                <circle id="planetAnh" cx="90" cy="65" r="6" fill="#00f5d4" />
                 <circle id="planetAnhCore" cx="90" cy="65" r="2.2" fill="#ffffff" />
               </g>
             </g>
@@ -363,18 +367,18 @@
         </div>
       </div>
 
-      <!-- VECTOR CARD II: INTERACTIVE HEARTBEAT FREQUENCY (Live 60fps Oscilloscope & ECG Scanner) -->
+      <!-- VECTOR CARD II: INTERACTIVE HEARTBEAT FREQUENCY -->
       <div class="reveal-item prism-frame editorial-panel rounded-[26px] p-5 space-y-4 cursor-pointer transition-transform active:scale-[0.98]" data-reveal="glide-right" id="vectorCard2">
         <div class="flex items-center justify-between text-[10px] font-syne tracking-[0.22em] text-cyan-300 uppercase">
           <span class="flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
             <span>ARTWORK II — RESONANCE</span>
           </span>
           <span id="bpmCounter" class="px-2.5 py-0.5 rounded-full border border-cyan-400/40 bg-cyan-500/10">128 BPM • CHẠM TĂNG NHỊP TIM</span>
         </div>
 
-        <!-- Live 60fps Harmonic Sine & ECG Heartbeat Monitor -->
-        <div class="relative h-48 w-full rounded-2xl bg-[#090314]/90 border border-white/10 flex items-center justify-center overflow-hidden">
+        <!-- Live Harmonic Sine & ECG Heartbeat Monitor -->
+        <div class="relative h-48 w-full rounded-2xl bg-[#090314]/95 border border-white/10 flex items-center justify-center overflow-hidden">
           <svg viewBox="0 0 320 170" class="w-full h-full">
             <defs>
               <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -393,7 +397,7 @@
             <line x1="0" y1="85" x2="320" y2="85" stroke="rgba(255,255,255,0.07)" stroke-width="1" />
             <line x1="0" y1="125" x2="320" y2="125" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
 
-            <!-- Live Spectrum Equalizer Bars (Animated at 60fps) -->
+            <!-- Live Spectrum Equalizer Bars -->
             <g id="spectrumBarsGroup" opacity="0.75"></g>
 
             <!-- 3 Real-Time Flowing Harmonic Sine Waves -->
@@ -429,18 +433,18 @@
         </div>
       </div>
 
-      <!-- VECTOR CARD III: TIMELESS INFINITY GEOMETRY (Live Breathing Sacred Rings & Infinity Photon Loom) -->
+      <!-- VECTOR CARD III: TIMELESS INFINITY GEOMETRY -->
       <div class="reveal-item prism-frame editorial-panel rounded-[26px] p-5 space-y-4 cursor-pointer transition-transform active:scale-[0.98]" data-reveal="curtain" id="vectorCard3">
         <div class="flex items-center justify-between text-[10px] font-syne tracking-[0.22em] text-amber-200 uppercase">
           <span class="flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
             <span>ARTWORK III — PROMISE</span>
           </span>
           <span id="promiseBadge" class="px-2.5 py-0.5 rounded-full border border-amber-300/40 bg-amber-400/10">ANH &amp; EM • ∞ VÔ CỰC</span>
         </div>
 
         <!-- Live Kinetic Sacred Geometry Interlocking Rings & Infinity Photons -->
-        <div class="relative h-48 w-full rounded-2xl bg-[#090314]/90 border border-white/10 flex items-center justify-center overflow-hidden">
+        <div class="relative h-48 w-full rounded-2xl bg-[#090314]/95 border border-white/10 flex items-center justify-center overflow-hidden">
           <svg viewBox="0 0 320 170" class="w-full h-full">
             <defs>
               <linearGradient id="infGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -460,13 +464,13 @@
 
             <!-- Live Breathing & Orbiting Interlocking Sacred Circles -->
             <g id="sacredRings" style="transform-origin: 160px 85px;" class="transition-transform duration-700">
-              <!-- Left Ring (Anh) + Counter-Rotating Astrolabe Halo -->
+              <!-- Left Ring (Anh) -->
               <g id="ringAnhGroup">
                 <circle id="ringAnhOuter" cx="128" cy="85" r="50" fill="none" stroke="rgba(255,42,133,0.18)" stroke-width="0.8" />
                 <circle id="ringAnh" cx="128" cy="85" r="44" fill="rgba(255,42,133,0.05)" stroke="url(#infGrad)" stroke-width="2" />
               </g>
 
-              <!-- Right Ring (Hoàng Anh) + Counter-Rotating Astrolabe Halo -->
+              <!-- Right Ring (Hoàng Anh) -->
               <g id="ringEmGroup">
                 <circle id="ringEmOuter" cx="192" cy="85" r="50" fill="none" stroke="rgba(0,245,212,0.18)" stroke-width="0.8" />
                 <circle id="ringEm" cx="192" cy="85" r="44" fill="rgba(0,245,212,0.05)" stroke="url(#infCyanGrad)" stroke-width="2" />
@@ -508,7 +512,6 @@
 
     <!-- =========================================================
          SECTION 03: INTERACTIVE BIRTHDAY CAKE & CANDLE WISH
-         (Kept & Elevated into Haute-Couture Vector Sculpture)
          ========================================================= -->
     <section class="px-5 py-8">
       <div class="reveal-item prism-frame editorial-panel rounded-[30px] p-6 text-center space-y-5 relative overflow-hidden" data-reveal="curtain">
@@ -670,7 +673,7 @@
   <!-- =========================================================
        CELEBRATION FINALE MODAL (PURE VECTOR LUXURY TICKET)
        ========================================================= -->
-  <div id="celebrationModal" class="fixed inset-0 z-50 hidden items-center justify-center p-5 bg-[#07030f]/92 backdrop-blur-2xl">
+  <div id="celebrationModal" class="fixed inset-0 z-50 hidden items-center justify-center p-5 bg-[#07030f]/95">
     <div class="prism-frame editorial-panel rounded-[30px] p-6 max-w-sm w-full text-center space-y-5 relative">
       <!-- Custom Vector Interlocking Heart Seal -->
       <div class="w-20 h-20 mx-auto rounded-full btn-prism flex items-center justify-center shadow-2xl">
@@ -719,7 +722,6 @@
       </div>
     </div>
   </div>
-
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>
