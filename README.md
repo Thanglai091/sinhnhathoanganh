@@ -14,4 +14,4 @@ Website được host tự động thông qua GitHub Pages:
 👉 **[Xem trang web tại đây](https://thanglai091.github.io/sinhnhathoanganh/)**
 
 ---
-*Created with all heart for Trần Hoàng Anh.*
+*Created and designed with all heart & love by **M.Thắng** for **Trần Hoàng Anh**.*
